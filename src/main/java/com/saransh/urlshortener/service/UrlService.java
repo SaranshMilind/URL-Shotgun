@@ -6,6 +6,7 @@ import com.saransh.urlshortener.exception.UrlNotFoundException;
 import com.saransh.urlshortener.repository.ClickAnalyticsRepository;
 import com.saransh.urlshortener.repository.UrlRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -30,21 +31,26 @@ public class UrlService {
         this.clickAnalyticsRepository = clickAnalyticsRepository;
     }
 
+
     public Url createShortUrl(String originalUrl) {
 
-        String shortCode = generateShortCode();
+        for (int attempt = 0; attempt < 5; attempt++) {
+            Url url = new Url();
+            url.setOriginalUrl(originalUrl);
+            url.setShortCode(generateShortCode());
 
-        while (urlRepository.existsByShortCode(shortCode)) {
-            shortCode = generateShortCode();
+            try {
+                return urlRepository.save(url);
+            } catch (DataIntegrityViolationException ex) {
+                if (attempt == 4) {
+                    throw ex;
+                }
+            }
         }
 
-        Url url = new Url();
-
-        url.setOriginalUrl(originalUrl);
-        url.setShortCode(shortCode);
-
-        return urlRepository.save(url);
+        throw new IllegalStateException("Unable to generate a unique short code");
     }
+
 
     public String getOriginalUrl(
             String shortCode,
