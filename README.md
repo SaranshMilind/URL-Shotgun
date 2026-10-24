@@ -49,6 +49,11 @@ The application converts long URLs into short, shareable links and records click
 - CSS
 
 ---
+### RESULTS
+
+1- Implemented centralized exception handling and request validation to return structured HTTP 400 and 404 error responses.
+2- Wrote automated service-layer unit tests using JUnit 5 and Mockito and controller-layer tests using MockMvc; measured 74% instruction coverage with JaCoCo.
+3- Benchmarked API performance using Apache JMeter, recording a 15 ms average response time in one test run with 50 samples and 0% errors.
 
 ## 🏗️ Architecture
 
