@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UrlService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">com.saransh.urlshortener.service</a> &gt; <span class="el_source">UrlService.java</span></div><h1>UrlService.java</h1><pre class="source lang-java linenums">package com.saransh.urlshortener.service;
+
+import com.saransh.urlshortener.entity.ClickAnalytics;
+import com.saransh.urlshortener.entity.Url;
+import com.saransh.urlshortener.exception.UrlNotFoundException;
+import com.saransh.urlshortener.repository.ClickAnalyticsRepository;
+import com.saransh.urlshortener.repository.UrlRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.Random;
+
+@Service
+public class UrlService {
+
+    private final UrlRepository urlRepository;
+    private final ClickAnalyticsRepository clickAnalyticsRepository;
+
+    private static final String CHARACTERS =
+            &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&quot;;
+
+<span class="fc" id="L24">    private final Random random = new Random();</span>
+
+    public UrlService(
+            UrlRepository urlRepository,
+<span class="fc" id="L28">            ClickAnalyticsRepository clickAnalyticsRepository) {</span>
+
+<span class="fc" id="L30">        this.urlRepository = urlRepository;</span>
+<span class="fc" id="L31">        this.clickAnalyticsRepository = clickAnalyticsRepository;</span>
+<span class="fc" id="L32">    }</span>
+
+
+    public Url createShortUrl(String originalUrl) {
+
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        for (int attempt = 0; attempt &lt; 5; attempt++) {</span>
+<span class="fc" id="L38">            Url url = new Url();</span>
+<span class="fc" id="L39">            url.setOriginalUrl(originalUrl);</span>
+<span class="fc" id="L40">            url.setShortCode(generateShortCode());</span>
+
+            try {
+<span class="fc" id="L43">                return urlRepository.save(url);</span>
+<span class="nc" id="L44">            } catch (DataIntegrityViolationException ex) {</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">                if (attempt == 4) {</span>
+<span class="nc" id="L46">                    throw ex;</span>
+                }
+            }
+        }
+
+<span class="nc" id="L51">        throw new IllegalStateException(&quot;Unable to generate a unique short code&quot;);</span>
+    }
+
+
+    public String getOriginalUrl(
+            String shortCode,
+            HttpServletRequest request) {
+
+<span class="fc" id="L59">        Url url = urlRepository.findByShortCode(shortCode)</span>
+<span class="fc" id="L60">                .orElseThrow(() -&gt;</span>
+<span class="fc" id="L61">                        new UrlNotFoundException(</span>
+                                &quot;Short URL not found: &quot; + shortCode));
+
+<span class="fc" id="L64">        ClickAnalytics clickAnalytics = new ClickAnalytics();</span>
+
+<span class="fc" id="L66">        clickAnalytics.setUrl(url);</span>
+<span class="fc" id="L67">        clickAnalytics.setIpAddress(request.getRemoteAddr());</span>
+<span class="fc" id="L68">        clickAnalytics.setUserAgent(request.getHeader(&quot;User-Agent&quot;));</span>
+<span class="fc" id="L69">        clickAnalytics.setReferrer(request.getHeader(&quot;Referer&quot;));</span>
+<span class="fc" id="L70">        clickAnalytics.setClickedAt(LocalDateTime.now());</span>
+
+<span class="fc" id="L72">        clickAnalyticsRepository.save(clickAnalytics);</span>
+
+<span class="fc" id="L74">        url.setClickCount(url.getClickCount() + 1);</span>
+<span class="fc" id="L75">        urlRepository.save(url);</span>
+
+<span class="fc" id="L77">        return url.getOriginalUrl();</span>
+    }
+
+    public Url getAnalytics(String shortCode) {
+
+<span class="pc" id="L82">        return urlRepository.findByShortCode(shortCode)</span>
+<span class="nc" id="L83">                .orElseThrow(() -&gt;</span>
+<span class="fc" id="L84">                        new UrlNotFoundException(</span>
+                                &quot;Short URL not found: &quot; + shortCode));
+    }
+
+    private String generateShortCode() {
+
+<span class="fc" id="L90">        StringBuilder code = new StringBuilder();</span>
+
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        for (int i = 0; i &lt; 6; i++) {</span>
+<span class="fc" id="L93">            int index = random.nextInt(CHARACTERS.length());</span>
+<span class="fc" id="L94">            code.append(CHARACTERS.charAt(index));</span>
+        }
+
+<span class="fc" id="L97">        return code.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

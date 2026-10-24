@@ -1,0 +1,14 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+,com.saransh.urlshortener.controller,UrlController,8,15,0,0,2,5,1,2,1,2
+,com.saransh.urlshortener.controller,RedirectController,21,6,0,0,8,3,1,1,1,1
+,com.saransh.urlshortener.exception,GlobalExceptionHandler,0,36,0,0,0,14,0,4,0,4
+,com.saransh.urlshortener.exception,UrlNotFoundException,0,4,0,0,0,2,0,1,0,1
+,com.saransh.urlshortener.entity,Url,0,31,0,0,0,13,0,8,0,8
+,com.saransh.urlshortener.entity,ClickAnalytics,18,23,0,0,6,11,6,6,6,6
+,com.saransh.urlshortener.config,CorsConfig,0,8,0,0,0,2,0,2,0,2
+,com.saransh.urlshortener.config,AsyncConfig,0,32,0,0,0,10,0,2,0,2
+,com.saransh.urlshortener.config,CorsConfig.new WebMvcConfigurer() {...},0,40,0,0,0,6,0,2,0,2
+,com.saransh.urlshortener.service,ClickRecorder,55,9,4,0,12,4,4,1,2,1
+,com.saransh.urlshortener.service,UrlService,16,134,3,3,5,30,2,8,0,7
+,com.saransh.urlshortener.dto,CreateUrlRequest,0,10,0,0,0,4,0,3,0,3
+,com.saransh.urlshortener,UrlShortnerApplication,5,3,0,0,2,1,1,1,1,1

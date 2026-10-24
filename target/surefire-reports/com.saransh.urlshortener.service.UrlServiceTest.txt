@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.saransh.urlshortener.service.UrlServiceTest
+-------------------------------------------------------------------------------
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.215 s -- in com.saransh.urlshortener.service.UrlServiceTest

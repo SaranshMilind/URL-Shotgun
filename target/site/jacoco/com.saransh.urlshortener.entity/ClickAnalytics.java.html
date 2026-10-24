@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ClickAnalytics.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">com.saransh.urlshortener.entity</a> &gt; <span class="el_source">ClickAnalytics.java</span></div><h1>ClickAnalytics.java</h1><pre class="source lang-java linenums">package com.saransh.urlshortener.entity;
+
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(
+        name = &quot;click_analytics&quot;,
+        indexes = @Index(name = &quot;idx_click_url_time&quot;, columnList = &quot;url_id, clickedAt&quot;)
+)
+<span class="fc" id="L12">public class ClickAnalytics {</span>
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;url_id&quot;, nullable = false)
+    private Url url;
+
+    private String ipAddress;
+
+    private String userAgent;
+
+    private String referrer;
+
+    @Column(nullable = false)
+    private LocalDateTime clickedAt;
+
+    public Long getId() {
+<span class="nc" id="L32">        return id;</span>
+    }
+
+    public Url getUrl() {
+<span class="nc" id="L36">        return url;</span>
+    }
+
+    public void setUrl(Url url) {
+<span class="fc" id="L40">        this.url = url;</span>
+<span class="fc" id="L41">    }</span>
+
+    public String getIpAddress() {
+<span class="nc" id="L44">        return ipAddress;</span>
+    }
+
+    public void setIpAddress(String ipAddress) {
+<span class="fc" id="L48">        this.ipAddress = ipAddress;</span>
+<span class="fc" id="L49">    }</span>
+
+    public String getUserAgent() {
+<span class="nc" id="L52">        return userAgent;</span>
+    }
+
+    public void setUserAgent(String userAgent) {
+<span class="fc" id="L56">        this.userAgent = userAgent;</span>
+<span class="fc" id="L57">    }</span>
+
+    public String getReferrer() {
+<span class="nc" id="L60">        return referrer;</span>
+    }
+
+    public void setReferrer(String referrer) {
+<span class="fc" id="L64">        this.referrer = referrer;</span>
+<span class="fc" id="L65">    }</span>
+
+    public LocalDateTime getClickedAt() {
+<span class="nc" id="L68">        return clickedAt;</span>
+    }
+
+    public void setClickedAt(LocalDateTime clickedAt) {
+<span class="fc" id="L72">        this.clickedAt = clickedAt;</span>
+<span class="fc" id="L73">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
