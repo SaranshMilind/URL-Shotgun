@@ -22,7 +22,7 @@ export default function UrlShortener() {
     try {
       setLoading(true);
       const data = await createShortUrl(url.trim());
-      const shortUrl = `${window.location.origin.replace("5173", "8080")}/${data.shortCode}`;
+      const shortUrl = `${import.meta.env.VITE_API_BASE_URL}/${data.shortCode}`;
       setResult({ ...data, shortUrl });
     } catch (err) {
       const message = err.response?.data?.message;
